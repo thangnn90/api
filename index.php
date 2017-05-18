@@ -12,19 +12,21 @@ $username = "root";
 $password = "";
 $database = "shop";
 
-$conn = mysqli_connect($server, $username, $password) or die("<h1>Koneksi Mysql Error : </h1>" . mysqli_connect_error());
+$conn = mysqli_connect($server, $username, $password, $database);
+if (!$conn) {
+    echo "không kết nối CSDL" . mysqli_connect_error();
+}
 
-@$operasi = $_GET['operasi'];
-
+$operasi = $_GET['operasi'];
 switch ($operasi) {
     case "view":
-        $sql_fillall = mysqli_query($conn, "SELECT * FROM shop WHERE status=0");
-        $data_array = array();
-        while (mysqli_num_rows($sql_fillall) > 0) {
-            $data_array[] = $row;
+        $sql = "select * from shop where status=0";
+        $data = array();
+        $result = mysqli_query($conn, $sql);
+        while ($row = mysqli_fetch_assoc($result)) {
+            $data[] = $row;
         }
-        echo json_encode($data_array);
-        printf(json_encode($data_array));
+        echo json_encode($data);
         break;
     case "insert":
         break;
